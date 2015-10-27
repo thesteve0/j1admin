@@ -21,6 +21,7 @@
     }
 
     function authenticated() {
+      request();
       document.getElementById('message').innerHTML = 'Email: ' + keycloak.tokenParsed['email'];
     }
 
