@@ -21,16 +21,20 @@
     }
 
     function authenticated() {
+      console.debug("Authenticated");
       request();
       document.getElementById('message').innerHTML = 'Email: ' + keycloak.tokenParsed['email'];
     }
 
     function notAuthenticated() {
+      console.debug("Not authenticated");
       document.getElementById('message').innerHTML = 'You shall not pass';
     }
 
     function request() {
       keycloak.updateToken(30).success(function() {
+        console.debug("Requesting players");
+
         var req = new XMLHttpRequest();
         var output = document.getElementById('message');
         req.open('GET', 'https://j1admin-thesteve0.rhcloud.com/ws/admin', true);
@@ -45,6 +49,8 @@
         req.onreadystatechange = function () {
           if (req.readyState == 4) {
             if (req.status == 200) {
+              console.debug("Received players");
+
               output.innerHTML = '<pre>' + req.responseText + '</pre>';
             } else {
               output.innerHTML = '<span class="error">' + req.status + ' ' + req.statusText + '</span>';
