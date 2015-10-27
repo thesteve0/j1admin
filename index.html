@@ -67,11 +67,11 @@
     function fillTable(characters) {
       var table = '';
       if (characters.length > 0) {
-        for (var prop in characters) {
-          table += '<tr>';
+        table += '<tr>';
+        for (var prop in characters[i]) {
           table += '<th>' + prop + '</th>';
-          table += '</tr>'
         }
+        table += '</tr>'
 
         for (var i = 0; i < characters.length; i++) {
           var char = characters[i];
