@@ -13,6 +13,7 @@
     window.onload = function () {
       keycloak.init({ onLoad: 'check-sso', checkLoginIframeInterval: 1 }).success(function () {
         if (keycloak.authenticated) {
+          //if (keycloak.tokenParsed['realm_access'])
           authenticated();
         } else {
           keycloak.login()
@@ -28,12 +29,12 @@
       console.debug("Authenticated");
       request();
       document.getElementById('container').style.display = 'block';
-      document.getElementById('message').innerHTML = 'Email: ' + keycloak.tokenParsed['email'];
+      document.getElementById('email').innerHTML = keycloak.tokenParsed['email'];
     }
 
-    function notAuthenticated() {
-      console.debug("Not authenticated");
-      document.getElementById('message').innerHTML = 'You shall not pass';
+    function noPass() {
+      console.debug("No access");
+      document.getElementById('not-pass').style.display = 'block';
     }
 
     function request() {
@@ -106,6 +107,10 @@
   <div id="jumbotron">
     <table id="characters" class="table table-striped table-bordered"></table>
   </div>
+</div>
+
+<div id="not-pass" style="display: none;">
+  <img src="not-pass.gif" style="position: absolute; left: 50%; top: 50%; margin-left: -250px; margin-top: -102px;"/>
 </div>
 
 </body>
