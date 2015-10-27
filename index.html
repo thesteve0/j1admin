@@ -58,7 +58,7 @@
               fillTable(JSON.parse(req.responseText));
             } else {
               console.debug('Request failed');
-              document.getElementById('jumbotron').innerHTML = '<div class="alert alert-danger" role="alert">Request failed (' + req.statusText + ') </div>'
+              document.getElementById('jumbotron').innerHTML = '<div class="alert alert-danger" role="alert">Request failed</div>'
             }
           }
         }
