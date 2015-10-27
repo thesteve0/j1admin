@@ -3,8 +3,58 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Welcome to OpenShift</title>
+  <title>D&D Admins</title>
+  <script src="https://j1keycloak-thesteve0.rhcloud.com/auth/js/keycloak.js"></script>
 
+  <script>
+    var keycloak = new Keycloak();
+
+    window.onload = function () {
+      keycloak.init({ onLoad: 'check-sso', checkLoginIframeInterval: 1 }).success(function () {
+        if (keycloak.authenticated) {
+          authenticated();
+        } else {
+          keycloak.login()
+          notAuthenticated();
+        }
+      } )
+    }
+
+    function authenticated() {
+      document.getElementById('message').innerHTML = 'Email: ' + keycloak.tokenParsed['email'];
+    }
+
+    function notAuthenticated() {
+      document.getElementById('message').innerHTML = 'You shall not pass';
+    }
+
+    function request() {
+      keycloak.updateToken(30).success(function() {
+        var req = new XMLHttpRequest();
+        var output = document.getElementById('message');
+        req.open('GET', 'https://j1admin-thesteve0.rhcloud.com/ws/admin', true);
+
+        if (keycloak.authenticated) {
+          console.debug('Adding token');
+          req.setRequestHeader('Authorization', 'Bearer ' + keycloak.token);
+        } else {
+          console.debug('Not authenticated!!');
+        }
+
+        req.onreadystatechange = function () {
+          if (req.readyState == 4) {
+            if (req.status == 200) {
+              output.innerHTML = '<pre>' + req.responseText + '</pre>';
+            } else {
+              output.innerHTML = '<span class="error">' + req.status + ' ' + req.statusText + '</span>';
+            }
+          }
+        }
+
+        req.send();
+      });
+    }
+  </script>
 <style>
 
 /*!
@@ -216,7 +266,8 @@ line-height: 1.4;
           <section class='col-xs-12 col-sm-6 col-md-6'>
             <section>
               <h2>Deploying code changes</h2>
-                
+              <div class="message" id="message"></div>
+
             </section>
 
           </section>
