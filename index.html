@@ -13,8 +13,11 @@
     window.onload = function () {
       keycloak.init({ onLoad: 'check-sso', checkLoginIframeInterval: 1 }).success(function () {
         if (keycloak.authenticated) {
-          //if (keycloak.tokenParsed['realm_access'])
-          authenticated();
+          if (keycloak.tokenParsed['realm_access'].roles.indexOf('admin')) {
+            noPass();
+          } else {
+            authenticated();
+          }
         } else {
           keycloak.login()
         }
